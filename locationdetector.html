@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Nearby Service Providers</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBj3NdwMZ8jgMZcF-Z2-ylzeYdt87GBRJs"></script>
+  <style>
+    body 
+    {
+      font-family:sans-serif; 
+      background: -webkit-linear-gradient(to right, #b47415, #afa191);  
+      background: linear-gradient(to right, #8495cc, #e7891d); 
+      color:#000;
+    }
+    h1{
+      color: #110b818c;
+    }
+    h2{
+      color: #7a25258f;
+    }
+    
+  </style>
+  
+</head>
+<body>
+  <h1><b>SANKAT MOCHAN</b></h1>
+  <h2><b>हमेशा आपके साथ</b></h2>
+  <div id="map" style="height: 400px; width: 100%;"></div>
+  <ul id="restaurantList"></ul>
+
+  <script>
+    var pseudoRestaurants = [
+      { name: 'Vivek AutoMobiles', address: 'Delta 1', phoneNumber: '8887668499', rating: '4.5' },
+      { name: 'Anant Motors And Services', address: 'Knowledge Park 3', phoneNumber: '8737032006', rating: '3.8' },
+      { name: 'Amit Motors', address: 'Alpha 2', phoneNumber: '7007066318', rating: '4.0' },
+      { name: 'Vishal Vehicle Parts And Repairing', address: 'Pari Chowk', phoneNumber: '9852525636', rating: '4.2' }
+    ];
+
+    var map;
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 15
+      });
+
+      if (navigator.geolocation) {
+        var options = {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        };
+
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+
+          map.setCenter(pos);
+
+          var marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            title: 'Your Location'
+          });
+
+          displayPseudoRestaurants();
+        }, function(error) {
+          console.log('Geolocation error:', error);
+          alert('Error: The Geolocation service failed.');
+          displayPseudoRestaurants();
+        },function(error) {
+          console.log('Geolocation error code:', error.code);
+          console.log('Geolocation error message:', error.message);
+          alert('Error: The Geolocation service failed.');
+          displayPseudoRestaurants();}, options);
+      } else {
+        console.log('Error: Your browser doesn\'t support Geolocation.');
+        alert('Error: Your browser doesn\'t support Geolocation.');
+        displayPseudoRestaurants();
+      }
+    }
+    function displayPseudoRestaurants() {
+      var restaurantList = document.getElementById('restaurantList');
+      pseudoRestaurants.forEach(function(restaurant) {
+        var li = document.createElement('li');
+        li.innerHTML = '<strong>Name:</strong> ' + restaurant.name + '<br>' +
+                       '<strong>Address:</strong> ' + restaurant.address + '<br>' +
+                       '<strong>Phone Number:</strong> ' + restaurant.phoneNumber + '<br>' +
+                       '<strong>Rating:</strong> ' + restaurant.rating + '<br><br>';
+        restaurantList.appendChild(li);
+      });
+    }
+    initMap();
+  </script>
+</body>
+</html>
